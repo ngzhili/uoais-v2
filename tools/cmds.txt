@@ -1,0 +1,1 @@
+python tools/run_inference.py --dataset-path ./sample --output-path ./output_sample --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
