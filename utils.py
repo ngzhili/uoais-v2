@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 import torch
 
-def normalize_depth(depth, min_val=250.0, max_val=2000.0):#min_val=250.0, max_val=1500.0):
+# def normalize_depth(depth, min_val=250.0, max_val=2000.0):#min_val=250.0, max_val=1500.0):
+def normalize_depth(depth, min_val=250.0, max_val=1500.0):
     """ normalize the input depth (mm) and return depth image (0 ~ 255)
     Args:
         depth ([np.float]): depth array [H, W] (mm) 
@@ -19,7 +20,7 @@ def normalize_depth(depth, min_val=250.0, max_val=2000.0):#min_val=250.0, max_va
     depth = np.uint8(np.repeat(depth, 3, -1))
     return depth
 
-def unnormalize_depth(depth, min_val=250.0, max_val=2000.0): # min_val=250.0, max_val=1500.0):
+def unnormalize_depth(depth, min_val=250.0, max_val=1500.0):
     """ unnormalize the input depth (0 ~ 255) and return depth image (mm)
     Args:
         depth([np.uint8]): normalized depth array [H, W, 3] (0 ~ 255)

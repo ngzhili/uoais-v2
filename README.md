@@ -169,6 +169,12 @@ uoais
 python train_net.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
 # UOAIS-Net (depth) 
 python train_net.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml 
+
+# Amodal-MRCNN (RGB-D)
+python train_net.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat.yaml
+
+# ASN
+python train_net.py --config-file configs/R50_rgbdconcat_asn7.yaml
 ```
 
 
@@ -181,6 +187,13 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_ho
 python eval/eval_on_OSD.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml --use-cgnet
 ```
 This code evaluates the UOAIS-Net that was trained on a single seed (7), thus the metrics from this code and the paper (an average of seeds 7, 77, 777) can be different.
+
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat.yaml --use-cgnet
+
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_asn7.yaml --use-cgnet
+
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_AMRCNN.yaml --use-cgnet --gpu 2
+
 
 ### Evaluation on OCID dataset
 
