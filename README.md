@@ -188,9 +188,15 @@ python eval/eval_on_OSD.py --config-file configs/R50_depth_mlc_occatmask_hom_con
 ```
 This code evaluates the UOAIS-Net that was trained on a single seed (7), thus the metrics from this code and the paper (an average of seeds 7, 77, 777) can be different.
 
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 1
+
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
+
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 2
+
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 3
 
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --use-cgnet --gpu 2
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat7.yaml --use-cgnet --gpu 2
 

@@ -37,7 +37,7 @@ def compute_occluded_masks(mask1, mask2):
     return iou, intersection_mask.astype(float)
 
 # A(i,j), col j, row i. row i --> col j
-def generate_ooam(inst_vis_mask_list,occlusion_mask_list):
+def generate_ooam(inst_vis_mask_list,occlusion_mask_list, iou_threshold=0.1):
     rows = cols = len(inst_vis_mask_list)
     # ooam = np.zeros((rows,cols))
     ooam = np.eye(rows,cols)
@@ -48,7 +48,7 @@ def generate_ooam(inst_vis_mask_list,occlusion_mask_list):
                 occluded_mask_j = occlusion_mask_list[j] # occludee
                 iou, _ = compute_occluded_masks(visible_mask_i,occluded_mask_j) 
                 
-                if iou > 0.1: # object i's visible mask is overlapping object j's occluded mask
+                if iou > iou_threshold: # object i's visible mask is overlapping object j's occluded mask
                     # print(iou)
                     # print(np.count_nonzero(_))
                     ooam[i][j] = 1
@@ -423,7 +423,7 @@ def eval_amodal_occ_on_OSD(args):
         # print(inst_vis_mask_list)
         # print(occlusion_mask_list)
         
-        gt_ooam = generate_ooam(inst_vis_mask_list, occlusion_mask_list)
+        gt_ooam = generate_ooam(inst_vis_mask_list, occlusion_mask_list, iou_threshold=0.1)
         # print("gt_ooam:")
         # print(gt_ooam)
         
@@ -441,6 +441,12 @@ def eval_amodal_occ_on_OSD(args):
 
         labels_gt = np.unique(annos)
         labels_gt = list(labels_gt[~np.isin(labels_gt, [BACKGROUND_LABEL])])
+
+        # print(f"labels_gt:{labels_gt}")
+        assigned_gt = [gt_id for gt_id, pred_id in assignments]
+        # print(f"assigned_gt:{assigned_gt}")
+        unassigned_gt = [gt_id for gt_id in labels_gt if gt_id not in assigned_gt]
+        # print(f"unassigned_gt:{unassigned_gt}")
 
         for gt_id, pred_id in assignments:              
             ###############
@@ -524,7 +530,7 @@ def eval_amodal_occ_on_OSD(args):
             occ_bou_pre += pre
             occ_bou_rec += rec
 
-        pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched)
+        pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched, iou_threshold=0.1)
 
         ooam_diagonal_size = len(gt_ooam)
         try:
@@ -549,8 +555,26 @@ def eval_amodal_occ_on_OSD(args):
             print("pred_ooam == gt_ooam",pred_ooam == gt_ooam)
             ooam_score = (np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size) / (gt_ooam.size - ooam_diagonal_size)
             print(ooam_score)
+        
 
-        num_correct_occ_ooam += np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size
+        similarityMatrix = pred_ooam == gt_ooam
+        # print("gt_ooam\n",gt_ooam)
+        # print("pred_ooam\n",pred_ooam)
+        # print("similarityMatrix\n",similarityMatrix)
+
+        # penalize unassigned gt matches
+        for gt_id in unassigned_gt:
+            gt_index = labels_gt.index(gt_id)
+            # set col and row to incorrect occlusion order classification
+            similarityMatrix[:, gt_index] = 0
+            similarityMatrix[gt_index, :] = 0
+
+            # set occlusion order for gt_index itself to be 1
+            similarityMatrix[gt_index, gt_index] = 1
+
+        # print("similarityMatrix_processed\n",similarityMatrix)
+
+        num_correct_occ_ooam += np.sum(similarityMatrix) - ooam_diagonal_size
         num_all_occ_ooam += gt_ooam.size - ooam_diagonal_size
 
         #####################################
@@ -1408,7 +1432,7 @@ def eval_amodal_occ_on_synthetic_data(args):
         # print(inst_vis_mask_list)
         # print(occlusion_mask_list)
         
-        gt_ooam = generate_ooam(inst_vis_mask_list,occlusion_mask_list)
+        gt_ooam = generate_ooam(inst_vis_mask_list,occlusion_mask_list, iou_threshold=0.1)
         # print("gt_ooam:")
         # print(gt_ooam)
 
@@ -1425,8 +1449,14 @@ def eval_amodal_occ_on_synthetic_data(args):
         labels_gt = np.unique(annos)
         labels_gt = list(labels_gt[~np.isin(labels_gt, [BACKGROUND_LABEL])])
 
+        # print(f"labels_gt:{labels_gt}")
+        assigned_gt = [gt_id for gt_id, pred_id in assignments]
+        # print(f"assigned_gt:{assigned_gt}")
+        unassigned_gt = [gt_id for gt_id in labels_gt if gt_id not in assigned_gt]
+        # print(f"unassigned_gt:{unassigned_gt}")
+
         # print("assignments:\n",assignments)
-        for gt_id, pred_id  in assignments:              
+        for gt_id, pred_id in assignments:              
             ###############
             # AMODAL MASK #
             ###############
@@ -1516,7 +1546,7 @@ def eval_amodal_occ_on_synthetic_data(args):
             occ_bou_rec += rec
 
         
-        pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched)
+        pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched, iou_threshold=0.1)
         ooam_diagonal_size = len(gt_ooam)
         try:
             assert (pred_ooam.size == gt_ooam.size)
@@ -1540,6 +1570,23 @@ def eval_amodal_occ_on_synthetic_data(args):
             print("pred_ooam == gt_ooam",pred_ooam == gt_ooam)
             ooam_score = (np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size) / (gt_ooam.size - ooam_diagonal_size)
             print(ooam_score)
+            
+        similarityMatrix = pred_ooam == gt_ooam
+        # print("gt_ooam\n",gt_ooam)
+        # print("pred_ooam\n",pred_ooam)
+        # print("similarityMatrix\n",similarityMatrix)
+
+        # penalize unassigned gt matches
+        for gt_id in unassigned_gt:
+            gt_index = labels_gt.index(gt_id)
+            # set col and row to incorrect occlusion order classification
+            similarityMatrix[:, gt_index] = 0
+            similarityMatrix[gt_index, :] = 0
+
+            # set occlusion order for gt_index itself to be 1
+            similarityMatrix[gt_index, gt_index] = 1
+
+        # print("similarityMatrix_processed\n",similarityMatrix)
 
         num_correct_occ_ooam += np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size
         num_all_occ_ooam += gt_ooam.size - ooam_diagonal_size
