@@ -29,13 +29,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--anno-path",
         type=str,
-        default="./datasets/UOAIS-Sim/annotations/coco_anns_uoais_sim_val.json",
+        default="./datasets/syntable/validation/uoais_val.json",
         help="path to the uoais_sim annotations"
     )
     parser.add_argument(
         "--dataset-path",
         type=str,
-        default="./datasets/UOAIS-Sim/val",
+        default="./datasets/syntable/validation",
         help="path to the dataset path"
     )
     

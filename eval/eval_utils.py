@@ -32,14 +32,15 @@ def compute_occluded_masks(mask1, mask2):
     intersection_mask = np.logical_and(mask1, mask2)
     intersection = np.count_nonzero(np.logical_and(mask1, mask2))
 
-    iou = intersection/(mask1_area+mask2_area-intersection)
+    iou = intersection/(mask1_area+mask2_area-intersection) if mask1_area+mask2_area-intersection > 0 else 0
 
     return iou, intersection_mask.astype(float)
 
 # A(i,j), col j, row i. row i --> col j
 def generate_ooam(inst_vis_mask_list,occlusion_mask_list):
     rows = cols = len(inst_vis_mask_list)
-    ooam = np.zeros((rows,cols))
+    # ooam = np.zeros((rows,cols))
+    ooam = np.eye(rows,cols)
     for i in range(0,len(inst_vis_mask_list)):
         visible_mask_i = inst_vis_mask_list[i] # occluder
         for j in range(0,len(occlusion_mask_list)):
@@ -52,6 +53,7 @@ def generate_ooam(inst_vis_mask_list,occlusion_mask_list):
                     # print(np.count_nonzero(_))
                     ooam[i][j] = 1
     return ooam
+
     
 def eval_visible_on_OSD(args):
 
@@ -421,9 +423,10 @@ def eval_amodal_occ_on_OSD(args):
         # print(inst_vis_mask_list)
         # print(occlusion_mask_list)
         
-        gt_ooam = generate_ooam(inst_vis_mask_list,occlusion_mask_list)
+        gt_ooam = generate_ooam(inst_vis_mask_list, occlusion_mask_list)
         # print("gt_ooam:")
         # print(gt_ooam)
+        
 
         # count area with matched instances
         # assign: [[gt_id, pred_id], ... ]
@@ -433,9 +436,12 @@ def eval_amodal_occ_on_OSD(args):
         occ_bou_pre, occ_bou_rec = 0, 0
         num_occ_over75_img = 0
 
-        pred_occ_mask_list_matched = []
-        pred_vis_mask_list_matched = []
-        # print("assignments:\n",assignments)
+        pred_occ_mask_list_matched = [np.zeros((H, W)) for _ in inst_vis_mask_list]
+        pred_vis_mask_list_matched = [np.zeros((H, W)) for _ in inst_vis_mask_list]
+
+        labels_gt = np.unique(annos)
+        labels_gt = list(labels_gt[~np.isin(labels_gt, [BACKGROUND_LABEL])])
+
         for gt_id, pred_id in assignments:              
             ###############
             # AMODAL MASK #
@@ -459,8 +465,18 @@ def eval_amodal_occ_on_OSD(args):
             occ_pred = np.bitwise_xor(amodal, visible) # predicted occlusion mask
             assign_occ_pred += np.count_nonzero(occ_pred)
 
-            pred_occ_mask_list_matched.append(occ_pred)
-            pred_vis_mask_list_matched.append(visible)
+            try:
+                pred_occ_mask_list_matched[labels_gt.index(gt_id)] = occ_pred
+                pred_vis_mask_list_matched[labels_gt.index(gt_id)] = visible
+            except:
+                print(f"img_name:{img_name}")
+                print("np.unique(annos):",np.unique(annos))
+                print("labels_gt:",labels_gt)
+                print("assignments:\n",assignments)
+                print("len(pred_vis_mask_list_matched)",len(pred_vis_mask_list_matched))
+                print(int(gt_id)-1)
+
+
             ############################
             # OCCLUSION CLASSIFICATION #
             ############################
@@ -509,11 +525,31 @@ def eval_amodal_occ_on_OSD(args):
             occ_bou_rec += rec
 
         pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched)
-        # print("pred_ooam:")
-        # print(pred_ooam)
-        
-        # ooam_score = np.sum(pred_ooam == gt_ooam) / gt_ooam.size # individual acc score
+
         ooam_diagonal_size = len(gt_ooam)
+        try:
+            assert (pred_ooam.size == gt_ooam.size)
+        except:
+            print(f"img_name:{img_name}")
+            print("np.unique(annos):",np.unique(annos))
+            print("assignments:\n",assignments)
+
+            print("gt_ooam.size:",gt_ooam.size)
+            print("inst_vis_mask_list:", len(inst_vis_mask_list))
+            print("occlusion_mask_list:", len(occlusion_mask_list))
+            print(f"ooam_diagonal_size:{ooam_diagonal_size}")
+
+            print("pred_ooam.size",pred_ooam.size)
+            print("pred_vis_mask_list_matched:", len(pred_vis_mask_list_matched))
+            print("pred_occ_mask_list_matched:", len(pred_occ_mask_list_matched))
+
+            print("np.sum(pred_ooam == gt_ooam)",np.sum(pred_ooam == gt_ooam))
+            print("gt_ooam",gt_ooam)
+            print("pred_ooam",pred_ooam)
+            print("pred_ooam == gt_ooam",pred_ooam == gt_ooam)
+            ooam_score = (np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size) / (gt_ooam.size - ooam_diagonal_size)
+            print(ooam_score)
+
         num_correct_occ_ooam += np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size
         num_all_occ_ooam += gt_ooam.size - ooam_diagonal_size
 
@@ -585,7 +621,7 @@ def eval_amodal_occ_on_OSD(args):
     occ_cls_rec = num_correct / num_inst_all_gt * 100 if num_inst_all_gt > 0 else 0
     occ_cls_f = (2*occ_cls_pre*occ_cls_rec) / (occ_cls_pre+occ_cls_rec) if occ_cls_pre+occ_cls_rec > 0 else 0
 
-    occ_ooam_acc = num_correct_occ_ooam / num_all_occ_ooam * 100 if num_all_occ_ooam > 0 else 0
+    occ_ooam_acc = (num_correct_occ_ooam / num_all_occ_ooam) * 100 if num_all_occ_ooam > 0 else 0
 
     # sum the values with same keys
     result = {}
@@ -1384,10 +1420,13 @@ def eval_amodal_occ_on_synthetic_data(args):
         occ_bou_pre, occ_bou_rec = 0, 0
         num_occ_over75_img = 0
 
-        pred_occ_mask_list_matched = []
-        pred_vis_mask_list_matched = []
+        pred_occ_mask_list_matched = [np.zeros((H, W)) for _ in inst_vis_mask_list]
+        pred_vis_mask_list_matched = [np.zeros((H, W)) for _ in inst_vis_mask_list]
+        labels_gt = np.unique(annos)
+        labels_gt = list(labels_gt[~np.isin(labels_gt, [BACKGROUND_LABEL])])
+
         # print("assignments:\n",assignments)
-        for gt_id, pred_id in assignments:              
+        for gt_id, pred_id  in assignments:              
             ###############
             # AMODAL MASK #
             ###############
@@ -1410,8 +1449,17 @@ def eval_amodal_occ_on_synthetic_data(args):
             occ_pred = np.bitwise_xor(amodal, visible) # predicted occlusion mask
             assign_occ_pred += np.count_nonzero(occ_pred)
 
-            pred_occ_mask_list_matched.append(occ_pred)
-            pred_vis_mask_list_matched.append(visible)
+            try:
+                pred_occ_mask_list_matched[labels_gt.index(gt_id)] = occ_pred
+                pred_vis_mask_list_matched[labels_gt.index(gt_id)] = visible
+            except:
+                print(f"img_name:{img_name}")
+                print("np.unique(annos):",np.unique(annos))
+                print("labels_gt:",labels_gt)
+                print("assignments:\n",assignments)
+                print("len(pred_vis_mask_list_matched)",len(pred_vis_mask_list_matched))
+                print(int(gt_id)-1)
+
             ############################
             # OCCLUSION CLASSIFICATION #
             ############################
@@ -1469,11 +1517,30 @@ def eval_amodal_occ_on_synthetic_data(args):
 
         
         pred_ooam = generate_ooam(pred_vis_mask_list_matched, pred_occ_mask_list_matched)
-        # print("pred_ooam:")
-        # print(pred_ooam)
-        
-        # ooam_score = np.sum(pred_ooam == gt_ooam) / gt_ooam.size # individual acc score
         ooam_diagonal_size = len(gt_ooam)
+        try:
+            assert (pred_ooam.size == gt_ooam.size)
+        except:
+            print(f"img_name:{img_name}")
+            print("np.unique(annos):",np.unique(annos))
+            print("assignments:\n",assignments)
+
+            print("gt_ooam.size:",gt_ooam.size)
+            print("inst_vis_mask_list:", len(inst_vis_mask_list))
+            print("occlusion_mask_list:", len(occlusion_mask_list))
+            print(f"ooam_diagonal_size:{ooam_diagonal_size}")
+
+            print("pred_ooam.size",pred_ooam.size)
+            print("pred_vis_mask_list_matched:", len(pred_vis_mask_list_matched))
+            print("pred_occ_mask_list_matched:", len(pred_occ_mask_list_matched))
+
+            print("np.sum(pred_ooam == gt_ooam)",np.sum(pred_ooam == gt_ooam))
+            print("gt_ooam",gt_ooam)
+            print("pred_ooam",pred_ooam)
+            print("pred_ooam == gt_ooam",pred_ooam == gt_ooam)
+            ooam_score = (np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size) / (gt_ooam.size - ooam_diagonal_size)
+            print(ooam_score)
+
         num_correct_occ_ooam += np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size
         num_all_occ_ooam += gt_ooam.size - ooam_diagonal_size
 
@@ -1552,7 +1619,7 @@ def eval_amodal_occ_on_synthetic_data(args):
     occ_cls_rec = num_correct / num_inst_all_gt * 100 if num_inst_all_gt > 0 else 0
     occ_cls_f = (2*occ_cls_pre*occ_cls_rec) / (occ_cls_pre+occ_cls_rec) if occ_cls_pre+occ_cls_rec > 0 else 0
 
-    occ_ooam_acc = num_correct_occ_ooam / num_all_occ_ooam * 100 if num_all_occ_ooam > 0 else 0
+    occ_ooam_acc = (num_correct_occ_ooam / num_all_occ_ooam) * 100 if num_all_occ_ooam > 0 else 0
 
     # sum the values with same keys
     result = {}
