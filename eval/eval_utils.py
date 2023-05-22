@@ -1588,7 +1588,7 @@ def eval_amodal_occ_on_synthetic_data(args):
 
         # print("similarityMatrix_processed\n",similarityMatrix)
 
-        num_correct_occ_ooam += np.sum(pred_ooam == gt_ooam) - ooam_diagonal_size
+        num_correct_occ_ooam += np.sum(similarityMatrix) - ooam_diagonal_size
         num_all_occ_ooam += gt_ooam.size - ooam_diagonal_size
 
         #####################################
