@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dataset-path",
         type=str,
-        default="./datasets/OSD-0.2-depth",
+        default="./datasets/OSD-0.2-depth", # '/home/ngzhili/uoais/datasets/OSD-0.2-depth',
         help="path to the OSD dataset"
     )
     parser.add_argument(

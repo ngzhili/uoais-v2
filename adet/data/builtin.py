@@ -43,7 +43,9 @@ _PREDEFINED_SPLITS_uoais = {
      "uoais_syntable2_train_amodal": ("syntable2/train","syntable2/train/uoais_train.json"),
     "uoais_syntable2_test_amodal": ("syntable2/validation", "syntable2/validation/uoais_validation.json"),    
     "uoais_syntable_train_amodal_tabletop": ("syntable/train","syntable/train/uoais_train_tabletop.json"),
-    "uoais_syntable_test_amodal_tabletop": ("syntable/validation", "syntable/validation/uoais_val_tabletop.json")
+    "uoais_syntable_test_amodal_tabletop": ("syntable/validation", "syntable/validation/uoais_val_tabletop.json"),
+     "uoais_syntable_100k_train_amodal": ("syntable_100k_train","syntable_100k_train/annotation_final.json"),
+    "uoais_syntable_100k_test_amodal": ("syntable_100k_train","syntable_100k_train/annotation_final.json"),
     }
 
 
