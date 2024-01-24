@@ -1,31 +1,16 @@
-# Unseen Object Amodal Instance Segmentation (UOAIS)
+# Unseen Object Amodal Instance Segmentation (UOAIS) v2
 
-Seunghyeok Back, Joosoon Lee, Taewon Kim, Sangjun Noh, Raeyoung Kang, Seongho Bak, Kyoobin Lee 
-
-
-This repository contains source codes for the paper "Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling." (ICRA 2022)
-
-[[Paper]](https://ieeexplore.ieee.org/abstract/document/9811646) [[ArXiv]](https://arxiv.org/abs/2109.11103) [[Project Website]](https://sites.google.com/view/uoais) [[Video]](https://youtu.be/rDTmXu6BhIU) 
-
-<img src="./imgs/demo.gif" height="300">
-
-
-## Updates & TODO Lists
-- [X] (2021.09.26) UOAIS-Net has been released 
-- [X] (2021.11.15) Inference codes for kinect azure and OSD dataset.
-- [X] (2021.11.22) ROS nodes for kinect azure and realsense D435
-- [X] (2021.12.22) Train and evaluation codes on OSD and OCID dataset + OSD-Amodal annotation
-
+This repository contains source codes for the paper "SynTable: A Synthetic Data Generation Pipeline for Unseen Object Amodal Instance Segmentation of Cluttered Tabletop Scenes". The source code has added synthetic data evaluation code and Occlusion Order Accuracy (OOACC) implemention to the UOAIS-Net source code from the "Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper.
 
 ## Getting Started
 
 ### Environment Setup
 
-Tested on Titan RTX with python 3.7, pytorch 1.8.0, torchvision 0.9.0, CUDA 10.2 / 11.1 and detectron2 v0.5 / v0.6
+Tested on NVIDIA Tesla V100 with python 3.7, pytorch 1.8.0, torchvision 0.9.0, CUDA 10.2 / 11.1 and detectron2 v0.5 / v0.6
 
 1. Download source codes and checkpoints
 ```
-git clone https://github.com/gist-ailab/uoais.git
+git clone https://github.com/ngzhili/uoais-v2.git
 cd uoais
 mkdir output
 ```
@@ -57,14 +42,16 @@ python setup.py build develop
 ```
 # UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
 python tools/run_on_OSD.py --use-cgnet --dataset-path ./sample_data --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (depth) + CG-Net (foreground segmentation)
 python tools/run_on_OSD.py --use-cgnet --dataset-path ./sample_data  --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (RGB-D)
 python tools/run_on_OSD.py --dataset-path ./sample_data --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (depth)
 python tools/run_on_OSD.py --dataset-path ./sample_data --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
 ```
-
 
 ### Run with ROS
 
@@ -106,16 +93,18 @@ roslaunch uoais uoais_k4a.launch
 
 ### Run without ROS
 
-
 1. Realsense D-435 ([librealsense](https://github.com/IntelRealSense/librealsense) and [pyrealsense2](https://pypi.org/project/pyrealsense2/) are required.)
 
 ```
 # UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
 python tools/rs_demo.py --use-cgnet --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
-UOAIS-Net (depth) + CG-Net (foreground segmentation)
+
+# UOAIS-Net (depth) + CG-Net (foreground segmentation)
 python tools/rs_demo.py --use-cgnet --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (RGB-D)
 python tools/rs_demo.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (depth)
 python tools/rs_demo.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
 ```
@@ -126,10 +115,13 @@ python tools/rs_demo.py --config-file configs/R50_depth_mlc_occatmask_hom_concat
 ```
 # UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
 python tools/k4a_demo.py --use-cgnet --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
-UOAIS-Net (depth) + CG-Net (foreground segmentation)
+
+# UOAIS-Net (depth) + CG-Net (foreground segmentation)
 python tools/k4a_demo.py --use-cgnet --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (RGB-D)
 python tools/k4a_demo.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (depth)
 python tools/k4a_demo.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
 ```
@@ -167,6 +159,7 @@ uoais
 ```
 # UOAIS-Net (RGB-D) 
 python train_net.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
+
 # UOAIS-Net (depth) 
 python train_net.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml 
 
@@ -175,18 +168,20 @@ python train_net.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat.yaml
 
 # ASN
 python train_net.py --config-file configs/R50_rgbdconcat_asn7.yaml
-```
+
 python train_net.py --config-file configs/R50_rgbdconcat_syntable_rerun_AMRCNN.yaml
 
 python train_net.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k.yaml --gpu 2
 
 python train_net.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k_no_aug.yaml --gpu 0
+```
 
 ### Evaluation on OSD dataset
 
 ```
 # UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml --use-cgnet
+
 # UOAIS-Net (depth) + CG-Net (foreground segmentation)
 python eval/eval_on_OSD.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml --use-cgnet
 ```
@@ -194,6 +189,7 @@ This code evaluates the UOAIS-Net that was trained on a single seed (7), thus th
 
 
 ###### no augmentation eval codes
+```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_no_aug.yaml --gpu 2
@@ -208,13 +204,10 @@ python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_o
 
 
 python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 2
-
-
-
-
+```
 
 ###### crop, no aug, distort eval codes
-
+```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop_no_aug_distort.yaml --gpu 1
 
 
@@ -222,26 +215,29 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_ho
 
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop_no_aug_distort.yaml --gpu 2
+```
+
 
 ###### crop eval codes
-
+```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop.yaml --gpu 1
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_crop.yaml --gpu 2
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop.yaml --gpu 3
-
+```
 ###### default eval codes
-
+```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 2
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop.yaml --gpu 3
-
+```
 
 
 ###### other eval codes
+```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 1
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
@@ -265,7 +261,7 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_asn7.yaml --use-
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_AMRCNN.yaml --use-cgnet --gpu 2
 
 python eval/eval_on_OSD.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k.yaml --gpu 2
-
+```
 
 ### Evaluation on OCID dataset
 
@@ -284,36 +280,11 @@ python tools/run_on_OSD.py --use-cgnet --config-file configs/R50_rgbdconcat_mlc_
 
 
 ## License
-
 The source code of this repository is released only for academic use. See the [license](./LICENSE.md) file for details.
 
-## Notes
 
-The codes of this repository are built upon the following open sources. Thanks to the authors for sharing the code!
-- Instance segmentation based on [Detectron2](https://github.com/facebookresearch/detectron2) and [AdelaiDet](https://github.com/aim-uofa/AdelaiDet)
-- Evaluation codes are modified from [4] [UCN](https://github.com/NVlabs/UnseenObjectClustering) and [5] [VRSP-Net](https://github.com/YutingXiao/Amodal-Segmentation-Based-on-Visible-Region-Segmentation-and-Shape-Prior). 
-- Synthetic dataset is generated with [6] [BlenderProc](https://github.com/DLR-RM/BlenderProc)
+## Acknowledgement
+The codes of this repository are built upon open sources. We like to thank the authors for their work and sharing their code.
 
+This repository contain source codes that have been heavily referenced from the original ["Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper](https://github.com/gist-ailab/uoais).
 
-## Citation
-If you use our work in a research project, please cite our work:
-```
-@inproceedings{back2022unseen,
-  title={Unseen object amodal instance segmentation via hierarchical occlusion modeling},
-  author={Back, Seunghyeok and Lee, Joosoon and Kim, Taewon and Noh, Sangjun and Kang, Raeyoung and Bak, Seongho and Lee, Kyoobin},
-  booktitle={2022 International Conference on Robotics and Automation (ICRA)},
-  pages={5085--5092},
-  year={2022},
-  organization={IEEE}
-}
-```
-
-## References
-```
-[1] SUN, Yao, et al. Cg-net: Conditional gis-aware network for individual building segmentation in vhr sar images. IEEE Transactions on Geoscience and Remote Sensing, 2021, 60: 1-15.
-[2] Richtsfeld, Andreas, et al. "Segmentation of unknown objects in indoor environments." 2012 IEEE/RSJ International Conference on Intelligent Robots and Systems. IEEE, 2012.
-[3] Suchi, Markus, et al. "EasyLabel: a semi-automatic pixel-wise object annotation tool for creating robotic RGB-D datasets." 2019 International Conference on Robotics and Automation (ICRA). IEEE, 2019.
-[4] Xiang, Yu, et al. "Learning rgb-d feature embeddings for unseen object instance segmentation." Conference on Robot Learning (CoRL). 2020.
-[5] Xiao, Yuting, et al. "Amodal Segmentation Based on Visible Region Segmentation and Shape Prior." Proceedings of the AAAI Conference on Artificial Intelligence. Vol. 35. No. 4. 2021.
-[6] DENNINGER, Maximilian, et al. Blenderproc. arXiv preprint arXiv:1911.01911, 2019.
-```
