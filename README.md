@@ -178,17 +178,17 @@ python train_net.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc
 
 ### Evaluation on OSD dataset
 
-```
+<!-- ```
 # UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml --use-cgnet
 
 # UOAIS-Net (depth) + CG-Net (foreground segmentation)
 python eval/eval_on_OSD.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml --use-cgnet
-```
+``` -->
 This code evaluates the UOAIS-Net that was trained on a single seed (7), thus the metrics from this code and the paper (an average of seeds 7, 77, 777) can be different.
 
 
-###### no augmentation eval codes
+###### No Augmentation
 ```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
 
@@ -196,29 +196,23 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_ho
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 3
 
-
 python eval/eval_on_OSD.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k_no_aug.yaml --gpu 0
 
-
 python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
-
 
 python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 2
 ```
 
-###### crop, no aug, distort eval codes
+###### Crop, No Augmentation, Distortion 
 ```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop_no_aug_distort.yaml --gpu 1
 
-
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_crop_no_aug_distort.yaml --gpu 3
-
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop_no_aug_distort.yaml --gpu 2
 ```
 
-
-###### crop eval codes
+###### Crop
 ```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop.yaml --gpu 1
 
@@ -226,7 +220,7 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_ho
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop.yaml --gpu 3
 ```
-###### default eval codes
+###### Default
 ```
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
 
@@ -234,7 +228,6 @@ python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_ho
 
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop.yaml --gpu 3
 ```
-
 
 ###### other eval codes
 ```
@@ -278,13 +271,31 @@ python eval/eval_on_OCID.py --config-file configs/R50_depth_mlc_occatmask_hom_co
 python tools/run_on_OSD.py --use-cgnet --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
 ```
 
-
 ## License
 The source code of this repository is released only for academic use. See the [license](./LICENSE.md) file for details.
-
 
 ## Acknowledgement
 The codes of this repository are built upon open sources. We like to thank the authors for their work and sharing their code.
 
 This repository contain source codes that have been heavily referenced from the original ["Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper](https://github.com/gist-ailab/uoais).
 
+
+# **Citation**
+If you find our work useful for your research, please consider citing the following BibTeX entry:
+```
+@misc{ng2023syntable,
+
+      title={SynTable: A Synthetic Data Generation Pipeline for Unseen Object Amodal Instance Segmentation of Cluttered Tabletop Scenes}, 
+
+      author={Zhili Ng and Haozhe Wang and Zhengshen Zhang and Francis Tay Eng Hock and Marcelo H. Ang Jr au2},
+
+      year={2023},
+
+      eprint={2307.07333},
+
+      archivePrefix={arXiv},
+
+      primaryClass={cs.CV}
+
+}
+```
