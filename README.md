@@ -155,7 +155,7 @@ uoais
               └──val
 ```
 
-### Train on UOAIS-Sim
+### Train different models on UOAIS-Sim
 ```
 # UOAIS-Net (RGB-D) 
 python train_net.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
@@ -169,94 +169,64 @@ python train_net.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat.yaml
 # ASN
 python train_net.py --config-file configs/R50_rgbdconcat_asn7.yaml
 
+# AMRCNN
 python train_net.py --config-file configs/R50_rgbdconcat_syntable_rerun_AMRCNN.yaml
 
-python train_net.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k.yaml --gpu 2
-
-python train_net.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k_no_aug.yaml --gpu 0
 ```
 
-### Evaluation on OSD dataset
+## Evaluation on OSD dataset
 
-<!-- ```
-# UOAIS-Net (RGB-D) + CG-Net (foreground segmentation)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml --use-cgnet
-
-# UOAIS-Net (depth) + CG-Net (foreground segmentation)
-python eval/eval_on_OSD.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml --use-cgnet
-``` -->
-This code evaluates the UOAIS-Net that was trained on a single seed (7), thus the metrics from this code and the paper (an average of seeds 7, 77, 777) can be different.
-
-
-###### No Augmentation
+#### Models trained with no augmentation
 ```
+# Training Dataset: UOAIS-SIM (tabletop) (25K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
 
+# Training Dataset: SynTable-Half-SIM (25K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_no_aug.yaml --gpu 2
 
+# Training Dataset: SynTable-SIM (50K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 3
 
-python eval/eval_on_OSD.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k_no_aug.yaml --gpu 0
-
-python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
-
-python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 2
 ```
 
-###### Crop, No Augmentation, Distortion 
+#### Models trained with crop, no augmentation, distortion 
 ```
+# Training Dataset: UOAIS-SIM (tabletop) (25K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop_no_aug_distort.yaml --gpu 1
 
+# Training Dataset: SynTable-Half-SIM (25K)
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop_no_aug_distort.yaml --gpu 2
+
+# Training Dataset: SynTable-SIM (50K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_crop_no_aug_distort.yaml --gpu 3
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop_no_aug_distort.yaml --gpu 2
 ```
 
-###### Crop
+#### Models trained with crop
 ```
+# Training Dataset: UOAIS-SIM (tabletop) (25K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_crop.yaml --gpu 1
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_crop.yaml --gpu 2
+# Training Dataset: SynTable-Half-SIM (25K)
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop.yaml --gpu 2
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop_crop.yaml --gpu 3
+# Training Dataset: SynTable-SIM (50K)
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_crop.yaml --gpu 3
+
 ```
-###### Default
+#### Models trained with default augmentation settings
 ```
+# Training Dataset: UOAIS-SIM (tabletop) (25K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 2
+# Training Dataset: SynTable-Half-SIM (25K)
+python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop.yaml --gpu 2
 
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_tabletop.yaml --gpu 3
-```
-
-###### other eval codes
-```
+# Training Dataset: SynTable-SIM (50K)
 python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 1
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 1
-
-python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 2
-
-python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 3
-
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k.yaml --gpu 1
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat7.yaml --use-cgnet --gpu 2
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_AMRCNN7_retrain.yaml --use-cgnet --gpu 2
-
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_amodalmrcnn_concat.yaml --use-cgnet
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_asn7.yaml --use-cgnet --gpu 2
-
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_AMRCNN.yaml --use-cgnet --gpu 2
-
-python eval/eval_on_OSD.py --config-file /home/ngzhili/uoais/configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_100k.yaml --gpu 2
 ```
 
-### Evaluation on OCID dataset
+## Evaluation on OCID dataset
 
 ```
 # UOAIS-Net (RGB-D)
@@ -265,11 +235,21 @@ python eval/eval_on_OCID.py --config-file configs/R50_rgbdconcat_mlc_occatmask_h
 python eval/eval_on_OCID.py --config-file configs/R50_depth_mlc_occatmask_hom_concat.yaml
 ```
 
-### Visualization on OSD dataset
+## Evaluation on Synthetic Datasets (UOAIS-SIM, SynTable-SIM)
+```
+# Training Dataset: UOAIS-SIM (tabletop) (25K), No Augmentation
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_no_aug.yaml --gpu 1
 
+# Training Dataset: SynTable-SIM (50K), No Augmentation
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun_no_aug.yaml --gpu 2
+
+# Training Dataset: UOAIS-SIM (tabletop) (25K), Default Augmentation
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop.yaml --gpu 3
+
+# Training Dataset: SynTable-SIM (50K), Default Augmentation
+python eval/eval_on_synthetic_data.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_rerun.yaml --gpu 2
 ```
-python tools/run_on_OSD.py --use-cgnet --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat.yaml
-```
+
 
 ## License
 The source code of this repository is released only for academic use. See the [license](./LICENSE.md) file for details.
