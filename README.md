@@ -272,3 +272,14 @@ If you find our work useful for your research, please consider citing the follow
       primaryClass={cs.CV}
 }
 ```
+Please also cite:
+```
+@inproceedings{back2022unseen,
+  title={Unseen object amodal instance segmentation via hierarchical occlusion modeling},
+  author={Back, Seunghyeok and Lee, Joosoon and Kim, Taewon and Noh, Sangjun and Kang, Raeyoung and Bak, Seongho and Lee, Kyoobin},
+  booktitle={2022 International Conference on Robotics and Automation (ICRA)},
+  pages={5085--5092},
+  year={2022},
+  organization={IEEE}
+}
+```
