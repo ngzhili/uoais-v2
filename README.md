@@ -1,6 +1,15 @@
 # Unseen Object Amodal Instance Segmentation (UOAIS) v2
 
-This repository contains source codes for the paper "SynTable: A Synthetic Data Generation Pipeline for Unseen Object Amodal Instance Segmentation of Cluttered Tabletop Scenes". The source code has added synthetic data evaluation code and Occlusion Order Accuracy (OOACC) implemention to the UOAIS-Net source code from the "Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper.
+This repository contains source codes for the paper **"SynTable: A Synthetic Data Generation Pipeline for Unseen Object Amodal Instance Segmentation of Cluttered Tabletop Scenes"**.
+
+Zhili Ng, Haozhe Wang, Zhengshen Zhang, Francis Eng Hock Tay,  Marcelo H. Ang Jr.
+
+The source code has added synthetic data evaluation code and Occlusion Order Accuracy (OOACC) implemention to the UOAIS-Net source code from the "Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper.
+
+[[arXiv]](https://arxiv.org/abs/2307.07333)
+[[Website]](https://sites.google.com/view/syntable/home)
+[[Demo Video]](https://drive.google.com/file/d/1OXqZoYdOmrCAI1u8CukRNusq2CX_ANV_/view)
+[[SynTable Source Code]](https://github.com/ngzhili/SynTable)
 
 ## Getting Started
 
@@ -272,7 +281,7 @@ If you find our work useful for your research, please consider citing the follow
       primaryClass={cs.CV}
 }
 ```
-Please also cite:
+Please also cite the original UOAIS-Net paper:
 ```
 @inproceedings{back2022unseen,
   title={Unseen object amodal instance segmentation via hierarchical occlusion modeling},
