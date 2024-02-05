@@ -2,12 +2,14 @@
 
 This repository contains source codes for the paper **"SynTable: A Synthetic Data Generation Pipeline for Unseen Object Amodal Instance Segmentation of Cluttered Tabletop Scenes"**.
 
-Zhili Ng, Haozhe Wang, Zhengshen Zhang, Francis Eng Hock Tay,  Marcelo H. Ang Jr.
+Zhili Ng*, Haozhe Wang*, Zhengshen Zhang*, Francis Eng Hock Tay,  Marcelo H. Ang Jr.
+*equal contributions
 
 The source code has added synthetic data evaluation code and Occlusion Order Accuracy (OOACC) implemention to the UOAIS-Net source code from the "Unseen Object Amodal Instance Segmentation via Hierarchical Occlusion Modeling" (ICRA 2022) paper.
 
 [[arXiv]](https://arxiv.org/abs/2307.07333)
 [[Website]](https://sites.google.com/view/syntable/home)
+[[Dataset]](https://doi.org/10.5281/zenodo.10565517)
 [[Demo Video]](https://drive.google.com/file/d/1OXqZoYdOmrCAI1u8CukRNusq2CX_ANV_/view)
 [[SynTable Source Code]](https://github.com/ngzhili/SynTable)
 
