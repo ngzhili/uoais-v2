@@ -40,7 +40,7 @@ pip install shapely torchfile opencv-python pyfastnoisesimd rapidfuzz termcolor
 ```
 Or if you prefer to use a docker container to replicate our results, you can download our docker image at [GDrive](https://drive.google.com/file/d/1nGFHZQYBSOMB4SwdENuGrZVoC7Xuek7i/view?usp=sharing).
 
-Load the docker image by running `docker load < uoais_latest.tar`.
+Load the docker image by running `docker load < uoais_latest.tar.gz`.
 
 6. Install [detectron2](https://detectron2.readthedocs.io/en/latest/tutorials/install.html)
 
