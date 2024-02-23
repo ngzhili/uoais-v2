@@ -192,57 +192,62 @@ python train_net.py --config-file configs/R50_rgbdconcat_syntable_rerun_AMRCNN.y
 
 Model Training configurations in SynTable paper can be found under ```./configs_experiments```.
 
-Download SynTable paper's model checkpoints from [Zenodo](https://doi.org/10.5281/zenodo.10565517).
+Pre-requisties:
 
+1. Download SynTable paper's model checkpoints in **experiment_model_weights** zip folder from [Zenodo](https://doi.org/10.5281/zenodo.10565517).
+
+2. Unzip **experiment_model_weights** folder and move the **output** folder into uoais-v2 base directory
+
+3. Now, you can run the evaluation codes below:
 
 #### Exp 1: Models trained with no crop, no augmentation, no distortion 
 ```
 # Training Dataset: UOAIS-SIM (tabletop) (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_1.yaml --gpu 1
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_1.yaml --gpu 1
 
 # Training Dataset: SynTable-Half-SIM (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_1.yaml --gpu 2
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_1.yaml --gpu 2
 
 # Training Dataset: SynTable-SIM (50K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_1.yaml --gpu 3
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_1.yaml --gpu 3
 
 ```
 
 #### Exp 2: Models trained with crop = 0.8, no augmentation, no distortion 
 ```
 # Training Dataset: UOAIS-SIM (tabletop) (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_2.yaml --gpu 1
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_2.yaml --gpu 1
 
 # Training Dataset: SynTable-Half-SIM (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_2.yaml --gpu 2
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_2.yaml --gpu 2
 
 # Training Dataset: SynTable-SIM (50K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_2.yaml --gpu 3
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_2.yaml --gpu 3
 
 ```
 
 #### Exp 3: Models trained with crop = 0.8, default augmentation, default distortion
 ```
 # Training Dataset: UOAIS-SIM (tabletop) (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_3.yaml --gpu 1
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_3.yaml --gpu 1
 
 # Training Dataset: SynTable-Half-SIM (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_3.yaml --gpu 2
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_3.yaml --gpu 2
 
 # Training Dataset: SynTable-SIM (50K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_3.yaml --gpu 3
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_3.yaml --gpu 3
 
 ```
 #### Exp 4: Models trained with default crop = 0.5, default augmentation, default distortion
 ```
 # Training Dataset: UOAIS-SIM (tabletop) (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_4.yaml --gpu 1
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_uoais_sim_tabletop_4.yaml --gpu 1
 
 # Training Dataset: SynTable-Half-SIM (25K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_4.yaml --gpu 2
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_0.5x_4.yaml --gpu 2
 
 # Training Dataset: SynTable-SIM (50K)
-python eval/eval_on_OSD.py --config-file configs/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_4.yaml --gpu 3
+python eval/eval_on_OSD.py --config-file configs_experiments/R50_rgbdconcat_mlc_occatmask_hom_concat_syntable_sim_4.yaml --gpu 3
 
 ```
 
