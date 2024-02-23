@@ -31,7 +31,6 @@ mkdir output
 
 4. Move the `rgbd_fg.pth` to the `foreground_segmentation` folder
 
-
 5. Set up a Python environment
 ```
 conda create -n uoais python=3.8
@@ -39,7 +38,8 @@ conda activate uoais
 pip install torch torchvision 
 pip install shapely torchfile opencv-python pyfastnoisesimd rapidfuzz termcolor
 ```
-Or if you prefer to use a docker container to replicate our results, you can download our docker image at [GDrive](https://drive.google.com/file/d/1nGFHZQYBSOMB4SwdENuGrZVoC7Xuek7i/view?usp=sharing)
+Or if you prefer to use a docker container to replicate our results, you can download our docker image at [GDrive](https://drive.google.com/file/d/1nGFHZQYBSOMB4SwdENuGrZVoC7Xuek7i/view?usp=sharing).
+
 Load the docker image by running `docker load < uoais_latest.tar`.
 
 6. Install [detectron2](https://detectron2.readthedocs.io/en/latest/tutorials/install.html)
